@@ -23,17 +23,17 @@ export const handler = async (
       const fallbackJoke = {
         setup: "Why did the developer go broke?",
         punchline: "Because they used up all their cache!",
+        fresh: false
       };
-      const body = JSON.stringify(
-        fallbackJoke.setup + " " + fallbackJoke.punchline,
-      );
+      const body = JSON.stringify(fallbackJoke);
       return new Response(body);
     }
 
     // If the fetch completes in time, proceed as usual
     if (res instanceof Response) {
       const newJoke = await res.json();
-      const body = JSON.stringify(newJoke.setup + " " + newJoke.punchline);
+      newJoke.fresh = true;
+      const body = JSON.stringify(newJoke);
       return new Response(body);
     } else {
       throw new Error("Failed to fetch joke");
@@ -41,10 +41,11 @@ export const handler = async (
   } catch (_error) {
     // Handle any other errors (e.g., network issues)
     const errorJoke = {
-      setup: "[cached] Why did the API call fail?",
+      setup: "Why did the API call fail?",
       punchline: "Because it couldn't handle the request!",
+      fresh: false
     };
-    const body = JSON.stringify(errorJoke.setup + " " + errorJoke.punchline);
+    const body = JSON.stringify(errorJoke);
     return new Response(body, { status: 500 });
   }
 };

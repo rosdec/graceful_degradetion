@@ -127,3 +127,6 @@ html {
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
+.text-red-500 {
+  color: #f56565;
+}
